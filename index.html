@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="https://unpkg.com/three@0.147.0/build/three.min.js"></script>
+  <script>
+    // ページの読み込みを待つ
+    window.addEventListener('DOMContentLoaded', init);
+
+    function init() {
+
+      // サイズを指定
+      const width = 960;
+      const height = 540;
+
+      // レンダラーを作成
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector('#myCanvas')
+      });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(width, height);
+
+      // シーンを作成
+      const scene = new THREE.Scene();
+
+      // カメラを作成
+      const camera = new THREE.PerspectiveCamera(45, width / height);
+      camera.position.set(0, 0, +2100);
+      //光源作成
+      const light1 = new THREE.AmbientLight(0xFFFFFF, 1.0);
+      scene.add(light1);
+     // const light1 = new THREE.PointLight(0xFFFFFF, 10, 1000, 0);
+      //light1.position.set(0,-500,-500)
+     // scene.add(light1);
+     const light = new THREE.DirectionalLight(0xFFFFFF, 3);
+     scene.add(light);
+      const light2 = new THREE.PointLight(0xFFFFFF, 3, 1000, 0);
+      light2.position.set(500,0,0)
+      scene.add(light2);
+
+
+      // 箱を作成
+      const torusgeometry = new THREE.TorusGeometry(450, 10, 64, 100);
+      const material1 = new THREE.MeshPhongMaterial({color: 0xDEB887});
+      const mesh = new THREE.Mesh(torusgeometry, material1);
+      const geometry =new THREE.SphereGeometry(400,100,100);
+      const material2 = new THREE.MeshPhongMaterial({color: 0x68B4513});
+      const a = new THREE.Mesh(geometry, material2);
+      const wrap = new THREE.Group();
+      wrap.add(mesh); // 任意のObject3Dを追加 
+      wrap.add(a);
+      wrap.rotation.set(40,15,0);
+      scene.add(wrap); 
+
+      tick();
+
+      // 毎フレーム時に実行されるループイベントです
+      function tick() {
+        //wrap.rotation.z += 0.01;
+        wrap.rotation.x += 0.01;
+        renderer.render(scene, camera); // レンダリング
+
+        requestAnimationFrame(tick);
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+</body>
+</html>
